@@ -1,0 +1,290 @@
+openapi: 3.0.1
+info:
+  title: Minilink
+  description: Documentação para o Minilink - Teste Backend da Teddy Open Finance
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Ambiente de desenvolvimento
+
+tags:
+  - name: Gerenciamento de Url
+  - name: Identidade do Usuario
+
+paths:
+  /auth/cadastrar:
+    post:
+      summary: Cadastra um usuário no sistema
+      operationId: cadastrarUsuario
+      tags:
+        - Identidade do Usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CadastroUsuario'
+      responses:
+        '201':
+          description: Usuário cadastrado
+        '404':
+          description: URL não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  
+  /auth/autenticar:
+    post:
+      summary: Autentica um usuário no sistema
+      operationId: autenticarUsuario
+      tags:
+        - Identidade do Usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/AutenticacaoUsuario'
+      responses:
+        '200':
+          description: Usuário autenticado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usuarioId:
+                    type: integer
+                    example: 1
+                  accessToken:
+                    type: string
+                    example: eyJjbGllbnRfaWQiOiJZekV6TUdkb01ISm5PSEJpT0cxaWJEaHlOVEE9IiwicmVzcG9uc2Vf dHlwZSI6ImNvZGUiLCJzY29wZSI6ImludHJvc2NwZWN0X3Rva2VucywgcmV2b2tlX3Rva2Vu cyIsImlzcyI6ImJqaElSak0xY1hwYWEyMXpkV3RJU25wNmVqbE1iazQ0YlRsTlpqazNkWEU9 Iiwic3ViIjoiWXpFek1HZG9NSEpuT0hCaU9HMWliRGh5TlRBPSIsImF1ZCI6Imh0dHBzOi8v bG9jYWxob3N0Ojg0NDMve3RpZH0ve2FpZH0vb2F1dGgyL2F1dGhvcml6ZSIsImp0aSI6IjE1MTYyMzkwMjIiLCJleHAiOiIyMDIxLTA1LTE3VDA3OjA5OjQ4LjAwMCswNTQ1In0 
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /{urlEncurtada}:
+    get:
+      summary: Redireciona o usuário para a URL original
+      operationId: redirecionarOrigem
+      tags:
+        - Gerenciamento de Url
+      parameters:
+        - $ref: '#/components/parameters/urlEncurtada'
+      responses:
+        '301': 
+          description: Redirecionado para a origem
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /urls/{urlId}:
+    delete:
+      summary: Remove a URL encurtada de um usuário autenticado
+      operationId: removerUrl
+      tags:
+        - Gerenciamento de Url
+      parameters:
+        - $ref: '#/components/parameters/urlId'
+      responses:
+        '204':
+          description: URL encurtada removida
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /urls:
+    get:
+      summary: Recupera todas as URLs do usuário autenticado
+      operationId: recuperarUrls
+      tags:
+        - Gerenciamento de Url
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: URLs listadas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaUrl'
+        '404':
+          description: URL não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      summary: Encurta uma URL
+      operationId: encurtarUrl
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                origem:
+                  type: string
+              required:
+                - origem
+      tags:
+        - Gerenciamento de Url
+      responses:
+        '201':
+          description: URL encurtada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  encurtada:
+                    type: string
+                    example: http://localhost/aZbKa7
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    Url:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        origem:
+          type: string
+          example: https://teddy360.com.br/material/marco-legal-das-garantias-sancionado-entenda-o-que-muda/
+        encurtada:
+          type: string
+          example: http://localhost/aZbKa7
+        cliques:
+          type: integer
+          example: 1
+
+    ListaUrl:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Url'
+        # pagination:
+        #   $ref: '#/components/schemas/Pagination'
+
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        email:
+          type: string
+          example: joao@example.com
+      required:
+        - id
+        - email
+
+    AutenticacaoUsuario:
+      type: object
+      properties:
+        email:
+          type: string
+          example: joao@exemplo.com
+        senha:
+          type: string
+          example: 12345
+
+    CadastroUsuario:
+      type: object
+      properties:
+        email:
+          type: string
+          example: joao@exemplo.com
+        senha:
+          type: string
+          example: 12345
+        confirmacao_senha:
+          type: string
+          example: 12345
+
+    Paginacao:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 100
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+
+  parameters:
+    urlId:
+      name: urlId
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 1
+
+    urlEncurtada:
+      name: urlEncurtada
+      in: path
+      required: true
+      schema:
+        type: string
+        example: aZbKa7
+
+    page:
+      name: page
+      in: query
+      description: Numero da página
+      required: false
+      schema:
+        type: integer
+        default: 1
+
+    limit:
+      name: limit
+      in: query
+      description: Itens por página
+      required: false
+      schema:
+        type: integer
+        default: 10
+
+  responses:
+    NotFound:
+      description: O recurso especificado não foi encontrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Recurso não encontrado
+
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Erro interno
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
