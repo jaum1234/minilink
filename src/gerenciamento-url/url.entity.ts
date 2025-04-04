@@ -1,4 +1,3 @@
-// src/url/url.entity.ts
 import { Usuario } from 'src/identidade-usuario/usuario.entity';
 import {
   Column,
@@ -19,8 +18,8 @@ export class Url {
   id!: number;
 
   @Column({
-    type: 'text',
-    name: 'origem',
+    type: 'varchar',
+    length: 80,
     nullable: false,
   })
   origem!: string;
@@ -28,7 +27,6 @@ export class Url {
   @Column({
     type: 'varchar',
     length: 80,
-    name: 'encurtada',
     unique: true,
   })
   @Index("IDX_ENCURTADA", { unique: true })
@@ -46,6 +44,6 @@ export class Url {
   @OneToMany(() => LogAcesso, (logAcesso) => logAcesso.url)
   acessos!: LogAcesso[];
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.urls, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Usuario, (usuario) => usuario.urls, { onDelete: 'CASCADE', nullable: true })
   usuario!: Usuario;
 }
