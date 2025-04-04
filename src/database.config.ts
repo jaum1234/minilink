@@ -13,6 +13,6 @@ export default registerAs(
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: process.env.DB_SYNCHRONIZE === 'true',
     migrations: [__dirname + '/migrations/*{.ts,.js}'],
-    migrationsRun: false,
+    migrationsRun: true,
   }),
 );
