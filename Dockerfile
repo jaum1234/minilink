@@ -24,4 +24,4 @@ COPY --from=builder /usr/src/app/migrations ./migrations
 
 EXPOSE 3000
 
-RUN npm run start:prod
+CMD ["npm", "run", "start:prod"]
