@@ -1,6 +1,7 @@
 import { Body, Controller, HttpStatus, Post, Res } from "@nestjs/common";
 import { Response } from "express";
-import { CadastrarUsuarioService } from "./cadastrar-usuario.service";
+import { CadastrarUsuarioDto } from "../cadastrar-usuario.dto";
+import { CadastrarUsuarioService } from "../cadastrar-usuario.service";
 
 @Controller('auth')
 export class CadastrarUsuarioController {
@@ -10,11 +11,11 @@ export class CadastrarUsuarioController {
 
   @Post('cadastrar')
   public async cadastrar(
-    @Body('email') email: string,
-    @Body('senha') senha: string,
-    @Body('confirmacao_senha') confirmacaoSenha: string,
+    @Body() cadastrarUsuarioDto: CadastrarUsuarioDto,
     @Res() res: Response
   ) {
+
+    const { email, senha, confirmacaoSenha } = cadastrarUsuarioDto;
 
     if (await this.cadastrarUsuarioService.buscarPorEmail(email) !== null) {
       return res.status(HttpStatus.BAD_REQUEST).json({ mensagem: 'Email já cadastrado' });
