@@ -51,6 +51,8 @@ web_modules/
 # Optional npm cache directory
 .npm
 
+mysql-init
+
 # Optional eslint cache
 .eslintcache
 
