@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: Minilink
   description: Documentação para o Minilink - Teste Backend da Teddy Open Finance
-  version: 1.0.0
+  version: 1.1.0
 
 servers:
   - url: http://localhost:3000
@@ -78,6 +78,34 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
   /urls/{urlId}:
+    patch:
+      summary: Atualiza uma URL encurtada de um usuário autenticado
+      operationId: atualizarUrl
+      tags:
+        - Gerenciamento de Url
+      parameters:
+        - $ref: '#/components/parameters/urlId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                origem:
+                  type: string
+              required:
+                - origem
+                
+      responses:
+        '200':
+          description: URL encurtada atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Url'
+        '500':
+          $ref: '#/components/responses/ServerError'
     delete:
       summary: Remove a URL encurtada de um usuário autenticado
       operationId: removerUrl
