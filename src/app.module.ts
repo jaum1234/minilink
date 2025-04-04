@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import databaseConfig from './database.config';
+import { EncurtarUrlModule } from './gerenciamento-url/encurtar-url/encurtar-url.module';
 
 @Module({
   imports: [
@@ -18,8 +19,7 @@ import databaseConfig from './database.config';
       }),
       inject: [ConfigService],
     }),
+    EncurtarUrlModule
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

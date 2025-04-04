@@ -1,4 +1,3 @@
-// src/access-log/access-log.entity.ts
 import { CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Url } from './url.entity';
 
