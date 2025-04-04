@@ -18,15 +18,15 @@ export class Url {
   @Column({
     type: 'text',
     name: 'origem',
-    nullable: false
+    nullable: false,
   })
   origem!: string;
 
-  @Column({ 
+  @Column({
     type: 'varchar',
-    length: 80, 
-    name: 'encurtada', 
-    unique: true 
+    length: 80,
+    name: 'encurtada',
+    unique: true,
   })
   @Index({ unique: true })
   encurtada!: string;
