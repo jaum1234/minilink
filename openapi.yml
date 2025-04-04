@@ -239,7 +239,7 @@ components:
         senha:
           type: string
           example: 12345
-        confirmacao_senha:
+        confirmacaoSenha:
           type: string
           example: 12345
 
