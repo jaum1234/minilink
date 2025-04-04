@@ -27,12 +27,18 @@ paths:
       responses:
         '201':
           description: Usuário cadastrado
-        '404':
-          description: URL não encontrada
+        '400':
+          description: Erro de validação
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/NotFound'
+                type: object
+                properties:
+                  erro:
+                    type: string
+                    example: Erro de validação
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
   
@@ -293,7 +299,7 @@ components:
           schema:
             type: object
             properties:
-              error:
+              erro:
                 type: string
                 example: Recurso não encontrado
 
@@ -304,7 +310,7 @@ components:
           schema:
             type: object
             properties:
-              error:
+              erro:
                 type: string
                 example: Erro interno
 
