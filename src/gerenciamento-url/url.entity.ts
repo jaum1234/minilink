@@ -2,11 +2,14 @@
 import { Usuario } from 'src/identidade-usuario/usuario.entity';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { LogAcesso } from './log_acesso.entity';
 
@@ -28,25 +31,16 @@ export class Url {
     name: 'encurtada',
     unique: true,
   })
-  @Index({ unique: true })
+  @Index("IDX_ENCURTADA", { unique: true })
   encurtada!: string;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
-  })
+  @CreateDateColumn()
   createdAt!: Date;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    name: 'updated_at',
-  })
+  @UpdateDateColumn()
   updatedAt!: Date;
 
-  @Column({ type: 'timestamp', default: null, nullable: true })
+  @DeleteDateColumn()
   deletedAt!: Date | null;
 
   @OneToMany(() => LogAcesso, (logAcesso) => logAcesso.url)

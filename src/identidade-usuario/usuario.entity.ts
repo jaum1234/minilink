@@ -5,7 +5,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { Url } from '../gerenciamento-url/url.entity';
 
@@ -30,18 +30,10 @@ export class Usuario {
   })
   senha!: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn()
   createdAt!: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @UpdateDateColumn()
   updatedAt!: Date;
 
   @OneToMany(() => Url, (url) => url.usuario)
