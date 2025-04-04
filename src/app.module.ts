@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import databaseConfig from './database.config';
 import { EncurtarUrlModule } from './gerenciamento-url/encurtar-url/encurtar-url.module';
+import { CadastrarUsuarioModule } from './identidade-usuario/cadastrar-usuario/cadastrar-usuario.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { EncurtarUrlModule } from './gerenciamento-url/encurtar-url/encurtar-url
       }),
       inject: [ConfigService],
     }),
-    EncurtarUrlModule
+    EncurtarUrlModule,
+    CadastrarUsuarioModule
   ],
 })
 export class AppModule {}
