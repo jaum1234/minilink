@@ -1,4 +1,3 @@
-import { Usuario } from 'src/identidade-usuario/usuario.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Usuario } from '../identidade-usuario/usuario.entity';
 import { LogAcesso } from './log_acesso.entity';
 
 @Entity()
