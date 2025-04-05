@@ -69,4 +69,14 @@ export class UrlService {
       id: urlId
     });
   }
+
+  async atualizar(id: number, origem: string) {
+    return await this.urlRepository.update({
+      id,
+    },
+    {
+      origem
+    });
+  }
+
 }
