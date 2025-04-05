@@ -1,5 +1,6 @@
-import { Body, Controller, HttpStatus, Post, Res } from "@nestjs/common";
+import { Body, Controller, HttpStatus, Inject, Post, Res } from "@nestjs/common";
 import { Response } from "express";
+import { UsuarioService } from "../../usuario.service";
 import { CadastrarUsuarioDto } from "../cadastrar-usuario.dto";
 import { CadastrarUsuarioService } from "../cadastrar-usuario.service";
 
@@ -7,6 +8,8 @@ import { CadastrarUsuarioService } from "../cadastrar-usuario.service";
 export class CadastrarUsuarioController {
   constructor(
     private readonly cadastrarUsuarioService: CadastrarUsuarioService,
+    @Inject(UsuarioService)
+    private readonly usuarioService: UsuarioService,
   ) {}
 
   @Post('cadastrar')
@@ -17,7 +20,7 @@ export class CadastrarUsuarioController {
 
     const { email, senha, confirmacaoSenha } = cadastrarUsuarioDto;
 
-    if (await this.cadastrarUsuarioService.buscarPorEmail(email) !== null) {
+    if (await this.usuarioService.buscarPorEmail(email) !== null) {
       return res.status(HttpStatus.BAD_REQUEST).json({ mensagem: 'Email já cadastrado' });
     }
     
@@ -27,7 +30,7 @@ export class CadastrarUsuarioController {
 
     const hash = await this.cadastrarUsuarioService.hashSenha(senha);
 
-    await this.cadastrarUsuarioService.criar(email, hash);
+    await this.usuarioService.criar(email, hash);
 
     return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso.' });
   }
