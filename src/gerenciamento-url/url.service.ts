@@ -12,7 +12,6 @@ export class UrlService {
     private urlRepository: Repository<Url>,
   ) { }
 
-
   async criar(origem: string, encurtada: string, acessos: LogAcesso[], usuario?: Usuario) {
     const entity = this.urlRepository.create({
       origem,
@@ -22,5 +21,17 @@ export class UrlService {
     });
 
     await this.urlRepository.save(entity);
+  }
+
+  async buscarTodos() {
+    return this.urlRepository.find({
+      relations: {
+        acessos: true,
+        usuario: true
+      },
+      order: {
+        createdAt: 'DESC'
+      }
+    });
   }
 }
