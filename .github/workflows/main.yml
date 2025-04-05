@@ -52,4 +52,4 @@ jobs:
       
       - name: Publicar Imagem
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ github.sha }}
+          docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ github.sha }}
