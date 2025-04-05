@@ -43,7 +43,7 @@ describe('EncutarUrlControllerTest', () => {
     const resultado = controller.encutar(dados);
 
     expect(mockEncutarUrlService.encutar).toHaveBeenCalledWith(urlOrigem);
-    expect(mockUrlService.criar).toHaveBeenCalledWith(urlOrigem, codigoGerado, [], undefined);
+    expect(mockUrlService.criar).toHaveBeenCalledWith(urlOrigem, `${baseUrl}/${codigoGerado}`, [], undefined);
     expect(mockConfigService.get).toHaveBeenCalledWith('BASE_URL');
     expect(resultado.encurtada).toEqual(`${baseUrl}/${codigoGerado}`);
   });
