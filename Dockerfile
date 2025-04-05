@@ -20,7 +20,6 @@ COPY --from=builder /usr/src/app/package*.json ./
 RUN npm ci --omit=dev
 
 COPY --from=builder /usr/src/app/.env* ./
-COPY --from=builder /usr/src/app/migrations ./migrations
 
 EXPOSE 3000
 
