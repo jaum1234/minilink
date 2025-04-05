@@ -1,5 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ExtrairJwtGuard } from '../../..//identidade-usuario/autenticar-usuario/guards/extrair-jwt.guard';
+import { UsuarioService } from '../../..//identidade-usuario/usuario.service';
+import { Usuario } from '../../../identidade-usuario/usuario.entity';
 import { UrlService } from "../../url.service";
 import { EncurtarUrlDto } from '../encurtar-url.dto';
 import { EncutarUrlService } from '../encutar-url.service';
@@ -10,16 +13,24 @@ export class EncutarUrlController {
     private readonly encutarUrlService: EncutarUrlService,
     private readonly urlService: UrlService,
     private readonly configService: ConfigService,
+    private readonly usuarioService: UsuarioService,
   ) {}
 
+  @UseGuards(ExtrairJwtGuard)
   @Post()
-  encutar(@Body() encurtarUrlDto: EncurtarUrlDto): { encurtada: string } {
+  async encutar(@Body() encurtarUrlDto: EncurtarUrlDto, @Request() req): Promise<{ encurtada: string }> {
     const codigo = this.encutarUrlService.encutar(encurtarUrlDto.origem);
 
     const base = this.configService.get("BASE_URL")
     const encurtada = `${base}/${codigo}`
 
-    this.urlService.criar(encurtarUrlDto.origem, encurtada, [], undefined);
+    let usuario: Usuario | undefined;
+
+    if (req.usuario) {
+      usuario = await this.usuarioService.buscarPorEmail(req.usuario.email) || undefined;
+    }
+
+    this.urlService.criar(encurtarUrlDto.origem, encurtada, [], usuario);
     
     return { encurtada };
   }
