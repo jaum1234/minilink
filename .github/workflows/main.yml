@@ -2,7 +2,7 @@ name: Minilink CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 env:
   DOCKER_TAG: ${{ github.sha }}
