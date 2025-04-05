@@ -20,7 +20,7 @@ export class UrlService {
       usuario
     });
 
-    await this.urlRepository.save(entity);
+    return await this.urlRepository.save(entity);
   }
 
   async buscarTodos(usuario: Usuario): Promise<Url[]> {
@@ -64,6 +64,14 @@ export class UrlService {
     });
   }
 
+  async buscarPorEncurtada(encurtada: string): Promise<Url|null> {
+    return await this.urlRepository.findOne({
+      where: {
+        encurtada
+      }
+    });
+  }
+
   async excluir(urlId: number) {
     await this.urlRepository.softDelete({
       id: urlId
@@ -79,4 +87,20 @@ export class UrlService {
     });
   }
 
+  async adicionarAcesso(urlId: number, logAcesso: LogAcesso) {
+    const url = await this.urlRepository.findOne({
+      where: {
+        id: urlId,
+      },
+      relations: {
+        acessos: true,
+      },
+    });
+
+    if (url === null) return;
+   
+    url.acessos.push(logAcesso);
+      
+    await this.urlRepository.save(url);
+  }
 }
