@@ -24,7 +24,7 @@ export class UrlService {
   }
 
   async buscarTodos(usuario: Usuario): Promise<Url[]> {
-    return await this.urlRepository.find({
+    const urls = await this.urlRepository.find({
       where: {
         usuario: {
           id: usuario.id
@@ -51,6 +51,11 @@ export class UrlService {
         createdAt: 'DESC'
       }
     });
+
+    return urls.map((url) => ({
+      ...url,
+      totalAcessos: url.acessos.length
+    }));
   }
 
   async buscarPorId(id: number): Promise<Url|null> {
