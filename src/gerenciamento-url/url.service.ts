@@ -23,15 +23,50 @@ export class UrlService {
     await this.urlRepository.save(entity);
   }
 
-  async buscarTodos() {
-    return this.urlRepository.find({
+  async buscarTodos(usuario: Usuario): Promise<Url[]> {
+    return await this.urlRepository.find({
+      where: {
+        usuario: {
+          id: usuario.id
+        },
+      },
       relations: {
         acessos: true,
         usuario: true
       },
+      select: {
+        id: true,
+        origem: true,
+        updatedAt: true,
+        createdAt: true,
+        acessos: true,
+        encurtada: true,
+        deletedAt: true,
+        usuario: {
+          id: true,
+          email: true,
+        },
+      },
       order: {
         createdAt: 'DESC'
       }
+    });
+  }
+
+  async buscarPorId(id: number): Promise<Url|null> {
+    return await this.urlRepository.findOne({
+      where: {
+        id
+      },
+      relations: {
+        usuario: true,
+      }
+    });
+  }
+
+  async excluir(urlId: number) {
+    await this.urlRepository.softDelete({
+      id: urlId
     });
   }
 }
