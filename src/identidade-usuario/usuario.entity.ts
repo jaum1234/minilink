@@ -24,7 +24,6 @@ export class Usuario {
   @Column({
     type: 'varchar',
     length: 255,
-    select: false,
     nullable: false,
   })
   senha!: string;

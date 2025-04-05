@@ -3,7 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import databaseConfig from './database.config';
 import { EncurtarUrlModule } from './gerenciamento-url/encurtar-url/encurtar-url.module';
+import { AutenticarUsuarioModule } from './identidade-usuario/autenticar-usuario/autenticar-usuario.module';
 import { CadastrarUsuarioModule } from './identidade-usuario/cadastrar-usuario/cadastrar-usuario.module';
+import { UsuarioModule } from './identidade-usuario/usuario.module';
 
 @Module({
   imports: [
@@ -21,7 +23,9 @@ import { CadastrarUsuarioModule } from './identidade-usuario/cadastrar-usuario/c
       inject: [ConfigService],
     }),
     EncurtarUrlModule,
-    CadastrarUsuarioModule
+    CadastrarUsuarioModule,
+    UsuarioModule,
+    AutenticarUsuarioModule
   ],
 })
 export class AppModule {}
