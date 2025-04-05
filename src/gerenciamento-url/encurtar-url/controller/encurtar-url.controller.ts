@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { UrlService } from "../../url.service";
 import { EncurtarUrlDto } from '../encurtar-url.dto';
 import { EncutarUrlService } from '../encutar-url.service';
 
@@ -7,13 +8,14 @@ import { EncutarUrlService } from '../encutar-url.service';
 export class EncutarUrlController {
   constructor(
     private readonly encutarUrlService: EncutarUrlService,
+    private readonly urlService: UrlService,
     private readonly configService: ConfigService,
   ) {}
 
   @Post()
   encutar(@Body() encurtarUrlDto: EncurtarUrlDto): { encurtada: string } {
     const codigo = this.encutarUrlService.encutar(encurtarUrlDto.origem);
-    this.encutarUrlService.criar(encurtarUrlDto.origem, codigo, [], undefined);
+    this.urlService.criar(encurtarUrlDto.origem, codigo, [], undefined);
     
     return { encurtada: `${this.configService.get("BASE_URL")}/${codigo}` };
   }
