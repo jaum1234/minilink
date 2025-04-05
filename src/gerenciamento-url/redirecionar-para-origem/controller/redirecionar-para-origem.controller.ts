@@ -16,8 +16,6 @@ export class RedirecionarParaOrigemController {
   async redirecionar(@Param("urlEncurtada") urlEncurtada: string, @Res() res: Response) {
     const base = this.configService.get<string>("BASE_URL");
 
-    console.log(`${base}/${urlEncurtada}`)
-
     const url = await this.urlService.buscarPorEncurtada(`${base}/${urlEncurtada}`);
 
     if (url === null) {
