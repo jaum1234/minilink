@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from "@nestjs/common";
-import { UrlService } from "src/gerenciamento-url/url.service";
-import { AutenticarUsuarioGuard } from "src/identidade-usuario/autenticar-usuario/autenticar-usuario.guard";
+import { VerificarJwtGuard } from "../../../identidade-usuario/autenticar-usuario/guards/verificar-jwt.guard";
+import { UrlService } from "../../url.service";
 
 @Controller("urls")
 export class ListarUrlsController {
@@ -8,7 +8,7 @@ export class ListarUrlsController {
     private readonly urlService: UrlService,
   ) {}
 
-  @UseGuards(AutenticarUsuarioGuard)
+  @UseGuards(VerificarJwtGuard)
   @Get()
   listar() {
     return this.urlService.buscarTodos();

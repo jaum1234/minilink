@@ -2,9 +2,10 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { UsuarioModule } from "../usuario.module";
-import { AutenticarUsuarioGuard } from "./autenticar-usuario.guard";
 import { AutenticarUsuarioService } from "./autenticar-usuario.service";
 import { AutenticarUsuarioController } from "./controller/autenticar-usuario.controller";
+import { ExtrairJwtGuard } from "./guards/extrair-jwt.guard";
+import { VerificarJwtGuard } from "./guards/verificar-jwt.guard";
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { AutenticarUsuarioController } from "./controller/autenticar-usuario.con
     })
   ],
   controllers: [AutenticarUsuarioController],
-  providers: [AutenticarUsuarioService, AutenticarUsuarioGuard],
-  exports: [AutenticarUsuarioGuard]
+  providers: [AutenticarUsuarioService, VerificarJwtGuard, ExtrairJwtGuard],
+  exports: [VerificarJwtGuard, ExtrairJwtGuard]
 })
 export class AutenticarUsuarioModule {}
