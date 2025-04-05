@@ -15,8 +15,12 @@ export class EncutarUrlController {
   @Post()
   encutar(@Body() encurtarUrlDto: EncurtarUrlDto): { encurtada: string } {
     const codigo = this.encutarUrlService.encutar(encurtarUrlDto.origem);
-    this.urlService.criar(encurtarUrlDto.origem, codigo, [], undefined);
+
+    const base = this.configService.get("BASE_URL")
+    const encurtada = `${base}/${codigo}`
+
+    this.urlService.criar(encurtarUrlDto.origem, encurtada, [], undefined);
     
-    return { encurtada: `${this.configService.get("BASE_URL")}/${codigo}` };
+    return { encurtada };
   }
 }
