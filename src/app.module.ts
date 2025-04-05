@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import databaseConfig from './database.config';
 import { EncurtarUrlModule } from './gerenciamento-url/encurtar-url/encurtar-url.module';
+import { ExcluirUrlModule } from './gerenciamento-url/excluir-url/excluir-url.module';
 import { ListarUrlsModule } from './gerenciamento-url/listar-urls/listar-urls.module';
 import { UrlModule } from './gerenciamento-url/url.module';
 import { AutenticarUsuarioModule } from './identidade-usuario/autenticar-usuario/autenticar-usuario.module';
@@ -30,6 +31,7 @@ import { UsuarioModule } from './identidade-usuario/usuario.module';
     AutenticarUsuarioModule,
     UrlModule,
     ListarUrlsModule,
+    ExcluirUrlModule
   ],
 })
 export class AppModule {}
