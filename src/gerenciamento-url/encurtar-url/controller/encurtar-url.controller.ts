@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { EncutarUrlService } from './encutar-url.service';
+import { EncutarUrlService } from '../encutar-url.service';
 
 @Controller('urls')
 export class EncutarUrlController {
