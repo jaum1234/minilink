@@ -32,6 +32,13 @@ Isso irá iniciar:
 - API NestJS na porta informada no .env
 - Banco de dados MySQL na porta informada no .env
 
+Caso haja problema de conexão com o banco de dados, tente limpar os volumes:
+```
+docker compose -f docker-compose.dev.yml down
+docker volume rm minilink_mysql_data
+docker compose -f docker-compose.dev.yml up -d
+```
+
 ## 🌐 Acessando a aplicação
 ```
 http://localhost:3000
