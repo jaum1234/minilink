@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
   title: Minilink
   description: Documentação para o Minilink - Teste Backend da Teddy Open Finance
@@ -44,7 +44,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/schemas/AutenticacaoUsuario'
+              $ref: '#/components/schemas/AutenticacaoUsuario'
       responses:
         '200':
           $ref: '#/components/responses/UsuarioAutenticado'
