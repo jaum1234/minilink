@@ -30,7 +30,9 @@ services:
       minilink-db:
         condition: service_healthy
     ports:
-      - "${APP_PORT}:3000"
+      - "3000:3000"
+    expose:
+      - "3000"
 
 networks:
   minilink-network:
