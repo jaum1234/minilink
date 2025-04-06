@@ -19,7 +19,7 @@ export class Url {
 
   @Column({
     type: 'varchar',
-    length: 80,
+    length: 255,
     nullable: false,
   })
   origem!: string;
