@@ -28,6 +28,26 @@ jobs:
       - name: Executa os testes
         run: npm test
 
+  lint:
+    name: Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepara Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Instala dependências
+        run: npm ci
+
+      - name: Executa o lint
+        run: npm run lint
+
   build:
     name: Build do Projeto
     needs: test
