@@ -92,7 +92,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             "cd ${{ secrets.APP_DIRECTORY }} && \
-             export APP_IMAGE='${{ APP_IMAGE }}' && \
+             export APP_IMAGE='${{ env.APP_IMAGE }}' && \
              docker compose -f ${{ vars.COMPOSE_FILE }} pull && \
              docker compose -f ${{ vars.COMPOSE_FILE }} down && \
              docker compose -f ${{ vars.COMPOSE_FILE }} up -d"
