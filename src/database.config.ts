@@ -12,6 +12,6 @@ export default registerAs(
     database: process.env.DB_NAME,
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: process.env.DB_SYNCHRONIZE === 'true',
-    migrations: [__dirname + '/migrations/*{.ts,.js}']
+    migrations: [__dirname + '/migrations/*{.ts,.js}'],
   }),
 );

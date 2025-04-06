@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 
 config({
-  path: ".env.development.local"
+  path: '.env.development.local',
 });
 
 export default new DataSource({
@@ -15,5 +15,5 @@ export default new DataSource({
   entities: ['src/**/*.entity{.ts,.js}'],
   migrations: ['migrations/*{.ts,.js}'],
   synchronize: false,
-  logging: true
+  logging: true,
 });
