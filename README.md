@@ -14,9 +14,14 @@ cd minilink
 2. **Crie os arquivos de ambiente:**
 ```
 cp .env.example .env
-cp .env.development.example.local
 ```
-Edite os arquivos conforme necessário.
+Edite os arquivos conforme necessário. Deve conter as variáveis necessárias para inicializar os containers pelo docker compose.
+
+```
+cp .env.development.example
+```
+Edite os arquivos conforme necessário. Deve conter as variáveis necessárias para inicializar o app NestJS.
+
 
 ## 🐳 Execução com Docker
 ```
