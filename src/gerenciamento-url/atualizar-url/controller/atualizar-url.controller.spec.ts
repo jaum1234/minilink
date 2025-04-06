@@ -1,4 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
+import { UrlIdParam } from '../../url-id.parm';
 import { AtualizarUrlController } from './atualizar-url.controller';
 
 describe('AtualizarUrlControllerTest', () => {
@@ -18,6 +19,10 @@ describe('AtualizarUrlControllerTest', () => {
     json: jest.fn().mockReturnThis(),
     send: jest.fn().mockReturnThis(),
   } as any;
+
+  const mockUrlIdParam: UrlIdParam = {
+    urlId: 1,
+  }
 
   const mockRequest = {
     usuario: {
@@ -40,7 +45,7 @@ describe('AtualizarUrlControllerTest', () => {
     mockUrlService.buscarPorId.mockResolvedValue({ usuario: { id: 1 } });
 
     await controller.atualizar(
-      '1',
+      mockUrlIdParam,
       mockAtualizarUrlDto,
       mockRequest,
       mockResponse,
@@ -61,7 +66,7 @@ describe('AtualizarUrlControllerTest', () => {
     mockUsuarioService.buscarPorEmail.mockResolvedValue(null);
 
     await controller.atualizar(
-      '1',
+      mockUrlIdParam,
       mockAtualizarUrlDto,
       mockRequest,
       mockResponse,
@@ -82,7 +87,7 @@ describe('AtualizarUrlControllerTest', () => {
     mockUrlService.buscarPorId.mockResolvedValue(null);
 
     await controller.atualizar(
-      '1',
+      mockUrlIdParam,
       mockAtualizarUrlDto,
       mockRequest,
       mockResponse,
@@ -101,7 +106,7 @@ describe('AtualizarUrlControllerTest', () => {
     mockUrlService.buscarPorId.mockResolvedValue({ usuario: { id: 2 } });
 
     await controller.atualizar(
-      '1',
+      mockUrlIdParam,
       mockAtualizarUrlDto,
       mockRequest,
       mockResponse,

@@ -1,4 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
+import { UrlIdParam } from '../../url-id.parm';
 import { ExcluirUrlController } from './excluir-url.controller';
 
 describe('ExcluirUrlControllerTest', () => {
@@ -25,6 +26,10 @@ describe('ExcluirUrlControllerTest', () => {
     },
   };
 
+  const mockUrlIdParam: UrlIdParam = {
+    urlId: 1,
+  }
+
   beforeEach(async () => {
     controller = new ExcluirUrlController(mockUrlService, mockUsuarioService);
   });
@@ -37,7 +42,7 @@ describe('ExcluirUrlControllerTest', () => {
     mockUsuarioService.buscarPorEmail.mockResolvedValue({ id: 1 });
     mockUrlService.buscarPorId.mockResolvedValue({ usuario: { id: 1 } });
 
-    await controller.excluir('1', mockRequest, mockResponse);
+    await controller.excluir(mockUrlIdParam, mockRequest, mockResponse);
 
     expect(mockUrlService.excluir).toHaveBeenCalledWith(1);
     expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(
@@ -51,7 +56,7 @@ describe('ExcluirUrlControllerTest', () => {
     mockUsuarioService.buscarPorEmail.mockResolvedValue(null);
 
     await controller.excluir(
-      '1',
+      mockUrlIdParam,
       { usuario: { email: 'test@example.com' } },
       mockResponse,
     );
@@ -71,7 +76,7 @@ describe('ExcluirUrlControllerTest', () => {
     mockUrlService.buscarPorId.mockResolvedValue(null);
 
     await controller.excluir(
-      '1',
+      mockUrlIdParam,
       { usuario: { email: 'test@example.com' } },
       mockResponse,
     );
@@ -89,7 +94,7 @@ describe('ExcluirUrlControllerTest', () => {
     mockUrlService.buscarPorId.mockResolvedValue({ usuario: { id: 2 } });
 
     await controller.excluir(
-      '1',
+      mockUrlIdParam,
       { usuario: { email: 'test@example.com' } },
       mockResponse,
     );
