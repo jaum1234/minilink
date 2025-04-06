@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { UrlIdParam } from 'src/gerenciamento-url/url-id.parm';
 import { VerificarJwtGuard } from '../../../identidade-usuario/autenticar-usuario/guards/verificar-jwt.guard';
 import { UsuarioService } from '../../../identidade-usuario/usuario.service';
 import { UrlService } from '../../url.service';
@@ -24,11 +25,14 @@ export class AtualizarUrlController {
   @Patch(':urlId')
   @UseGuards(VerificarJwtGuard)
   async atualizar(
-    @Param('urlId') urlId: string,
+    @Param() params: UrlIdParam,
     @Body() atualizarUrlDto: AtualizarUrlDto,
     @Request() req: { usuario: { email: string } },
     @Res() res: Response,
   ) {
+
+    console.log(params.urlId)
+
     const usuario = await this.usuarioService.buscarPorEmail(req.usuario.email);
 
     if (usuario === null) {
@@ -37,7 +41,7 @@ export class AtualizarUrlController {
         .json({ message: 'Usuário não encontrado' });
     }
 
-    const url = await this.urlService.buscarPorId(Number.parseInt(urlId));
+    const url = await this.urlService.buscarPorId(params.urlId);
 
     if (url === null) {
       return res
@@ -52,7 +56,7 @@ export class AtualizarUrlController {
     }
 
     await this.urlService.atualizar(
-      Number.parseInt(urlId),
+      params.urlId,
       atualizarUrlDto.origem,
     );
 
