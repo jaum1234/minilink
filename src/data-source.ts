@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 
 config({
-  path: '.env.development.local',
+  path: `.env.${process.env.NODE_ENV}.local`,
 });
 
 export default new DataSource({
