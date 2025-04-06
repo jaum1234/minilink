@@ -18,7 +18,7 @@ cp .env.example .env
 Edite os arquivos conforme necessário. Deve conter as variáveis necessárias para inicializar os containers pelo docker compose.
 
 ```
-cp .env.development.example
+cp .env.development.example.local .env.development.local
 ```
 Edite os arquivos conforme necessário. Deve conter as variáveis necessárias para inicializar o app NestJS.
 
