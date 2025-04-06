@@ -6,6 +6,7 @@ on:
 
 env:
   DOCKER_TAG: ${{ github.sha }}
+  APP_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ env.DOCKER_TAG }}
 
 jobs:
   test:
@@ -65,11 +66,11 @@ jobs:
 
       - name: Construir Imagem
         run: |
-          docker buildx build --load  -t ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ env.DOCKER_TAG }} .
+          docker buildx build --load  -t${{ env.APP_IMAGE }} .
       
       - name: Publicar Imagem
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ env.DOCKER_TAG }}
+          docker push ${{ env.APP_IMAGE }}
 
   deploy:
     name: Deploy
@@ -94,4 +95,4 @@ jobs:
             "cd ${{ secrets.APP_DIRECTORY }} && \
              docker compose -f ${{ vars.COMPOSE_FILE }} pull && \
              docker compose -f ${{ vars.COMPOSE_FILE }} down && \
-             docker compose -f ${{ vars.COMPOSE_FILE }} up -d"
+             APP_IMAGE=${{ env.APP_IMAGE }} docker compose -f ${{ vars.COMPOSE_FILE }} up -d"
