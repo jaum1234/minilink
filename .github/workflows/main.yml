@@ -2,10 +2,6 @@ name: Minilink CI/CD Pipeline
 
 on:
   push:
-    paths:
-      - 'src/**'
-      - '!*.md'
-      - '!openapi.yml'
     branches: [ master ]
 
 env:
