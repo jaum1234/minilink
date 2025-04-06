@@ -7,6 +7,8 @@ info:
 servers:
   - url: http://localhost:3000
     description: Ambiente de desenvolvimento
+  - url: https://minilink.jotacoura.app
+    description: Ambiente de produção
 
 tags:
   - name: Gerenciamento de Url
@@ -28,17 +30,7 @@ paths:
         '201':
           description: Usuário cadastrado
         '400':
-          description: Erro de validação
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  erro:
-                    type: string
-                    example: Erro de validação
-        '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/ServerError'
   
@@ -55,18 +47,11 @@ paths:
               $ref: '#components/schemas/AutenticacaoUsuario'
       responses:
         '200':
-          description: Usuário autenticado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  usuarioId:
-                    type: integer
-                    example: 1
-                  accessToken:
-                    type: string
-                    example: eyJjbGllbnRfaWQiOiJZekV6TUdkb01ISm5PSEJpT0cxaWJEaHlOVEE9IiwicmVzcG9uc2Vf dHlwZSI6ImNvZGUiLCJzY29wZSI6ImludHJvc2NwZWN0X3Rva2VucywgcmV2b2tlX3Rva2Vu cyIsImlzcyI6ImJqaElSak0xY1hwYWEyMXpkV3RJU25wNmVqbE1iazQ0YlRsTlpqazNkWEU9 Iiwic3ViIjoiWXpFek1HZG9NSEpuT0hCaU9HMWliRGh5TlRBPSIsImF1ZCI6Imh0dHBzOi8v bG9jYWxob3N0Ojg0NDMve3RpZH0ve2FpZH0vb2F1dGgyL2F1dGhvcml6ZSIsImp0aSI6IjE1MTYyMzkwMjIiLCJleHAiOiIyMDIxLTA1LTE3VDA3OjA5OjQ4LjAwMCswNTQ1In0 
+          $ref: '#/components/responses/UsuarioAutenticado'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
 
@@ -79,14 +64,18 @@ paths:
       parameters:
         - $ref: '#/components/parameters/urlEncurtada'
       responses:
-        '301': 
+        '307': 
           description: Redirecionado para a origem
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
   /urls/{urlId}:
     patch:
       summary: Atualiza uma URL encurtada de um usuário autenticado
       operationId: atualizarUrl
+      security:
+        - BearerAuth: []
       tags:
         - Gerenciamento de Url
       parameters:
@@ -105,16 +94,18 @@ paths:
                 
       responses:
         '200':
-          description: URL encurtada atualizada
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Url'
+          $ref: '#/components/responses/UrlAtualizada'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
     delete:
       summary: Remove a URL encurtada de um usuário autenticado
       operationId: removerUrl
+      security:
+        - BearerAuth: []
       tags:
         - Gerenciamento de Url
       parameters:
@@ -122,6 +113,10 @@ paths:
       responses:
         '204':
           description: URL encurtada removida
+        '400':
+          $ref: '#/components/responses/NotFound'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
 
@@ -129,6 +124,8 @@ paths:
     get:
       summary: Recupera todas as URLs do usuário autenticado
       operationId: recuperarUrls
+      security:
+        - BearerAuth: []
       tags:
         - Gerenciamento de Url
       parameters:
@@ -136,17 +133,9 @@ paths:
         - $ref: '#/components/parameters/limit'
       responses:
         '200':
-          description: URLs listadas
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListaUrl'
+          $ref: '#/components/responses/ListaDeUrls'
         '404':
-          description: URL não encontrada
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
     post:
@@ -167,15 +156,7 @@ paths:
         - Gerenciamento de Url
       responses:
         '201':
-          description: URL encurtada
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  encurtada:
-                    type: string
-                    example: http://localhost/aZbKa7
+          $ref: '#/components/responses/UrlEncurtada'
         '500':
           $ref: '#/components/responses/ServerError'
 
@@ -193,19 +174,25 @@ components:
         encurtada:
           type: string
           example: http://localhost/aZbKa7
-        cliques:
-          type: integer
-          example: 1
-
-    ListaUrl:
-      type: object
-      properties:
-        data:
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        deletedAt:
+          type: string
+        acessos:
           type: array
           items:
-            $ref: '#/components/schemas/Url'
-        # pagination:
-        #   $ref: '#/components/schemas/Pagination'
+            type: object
+            properties:
+              id: 
+                type: integer
+              createdAt:
+                type: string
+        totalAcessos:
+          type: integer
+      
+        
 
     Usuario:
       type: object
@@ -292,6 +279,81 @@ components:
         default: 10
 
   responses:
+    UsuarioAutenticado:
+      description: Usuário autenticado com sucesso
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: Usuário autenticado com sucesso.
+              data:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: "jwt"
+    
+    ListaDeUrls:
+      description: URLs listadas
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  urls:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Url'
+              statusCode:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Urls do usuário autenticado listadas
+
+    UrlAtualizada:
+      description: URL atualizada com sucesso
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 200
+              data:
+                type: object
+                properties:
+                  origem:
+                    type: string
+                    example: https://google.com
+              message:
+                type: string
+                example: Url atualizada com sucesso
+    
+    BadRequest:
+      description: O corpo da requisição é inválido
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 400
+              message: 
+                type: string
+                example: Dados inválidos
+
     NotFound:
       description: O recurso especificado não foi encontrado
       content:
@@ -299,9 +361,27 @@ components:
           schema:
             type: object
             properties:
-              erro:
+              statusCode:
+                type: integer
+                example: 404
+              message:
                 type: string
                 example: Recurso não encontrado
+
+    Forbidden:
+      description: Usuário sem acesso ao recurso especificado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 403
+              message:
+                type: string
+                example: Você não possui acesso à esse recurso
+              
 
     ServerError:
       description: Internal server error
@@ -314,11 +394,51 @@ components:
                 type: string
                 example: Erro interno
 
+    UsuarioCadastrado:
+      description: Usuário cadastrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 201
+              data:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  email:
+                    type: string
+                    example: mail@mail.com
+              message:
+                type: string
+                example: Usuário cadastrado com sucesso
+
+    UrlEncurtada:
+      description: URL encurtada
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 201
+              data:
+                type: object
+                properties:
+                  encurtada:
+                    type: string
+                    example: http://localhost/aZbKa7
+              message:
+                type: string
+                example: Url encurtada com sucesso
+
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-security:
-  - BearerAuth: []
