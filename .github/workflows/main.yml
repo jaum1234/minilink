@@ -5,8 +5,7 @@ on:
     branches: [ master ]
 
 env:
-  DOCKER_TAG: ${{ github.sha }}
-  APP_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ env.DOCKER_TAG }}
+  APP_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ github.sha }}
 
 jobs:
   test:
