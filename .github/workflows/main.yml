@@ -48,7 +48,7 @@ jobs:
 
       - name: Construir Imagem
         run: |
-          docker buildx --load build -t ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ env.DOCKER_TAG }} .
+          docker buildx build --load  -t ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ env.DOCKER_TAG }} .
       
       - name: Publicar Imagem
         run: |
