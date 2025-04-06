@@ -9,9 +9,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { UrlIdParam } from 'src/gerenciamento-url/url-id.parm';
 import { VerificarJwtGuard } from '../../../identidade-usuario/autenticar-usuario/guards/verificar-jwt.guard';
 import { UsuarioService } from '../../../identidade-usuario/usuario.service';
+import { UrlIdParam } from '../../url-id.parm';
 import { UrlService } from '../../url.service';
 import { AtualizarUrlDto } from '../atualizar-url.dto';
 
@@ -30,8 +30,6 @@ export class AtualizarUrlController {
     @Request() req: { usuario: { email: string } },
     @Res() res: Response,
   ) {
-
-    console.log(params.urlId)
 
     const usuario = await this.usuarioService.buscarPorEmail(req.usuario.email);
 
