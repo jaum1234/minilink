@@ -19,8 +19,11 @@ COPY --from=builder /usr/src/app/package*.json ./
 
 RUN npm ci --omit=dev
 
+COPY --from=builder /usr/src/app/docker-entrypoint.sh ./
 COPY --from=builder /usr/src/app/.env* ./
+
+RUN chmod +x /usr/src/app/docker-entrypoint.sh
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start:prod"]
+ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]
