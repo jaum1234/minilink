@@ -23,7 +23,7 @@ describe('ExcluirUrlControllerTest', () => {
     usuario: {
       email: 'test@example.com',
     },
-  }
+  };
 
   beforeEach(async () => {
     controller = new ExcluirUrlController(mockUrlService, mockUsuarioService);
@@ -37,14 +37,12 @@ describe('ExcluirUrlControllerTest', () => {
     mockUsuarioService.buscarPorEmail.mockResolvedValue({ id: 1 });
     mockUrlService.buscarPorId.mockResolvedValue({ usuario: { id: 1 } });
 
-    await controller.excluir(
-      '1',
-      mockRequest,
-      mockResponse,
-    );
+    await controller.excluir('1', mockRequest, mockResponse);
 
     expect(mockUrlService.excluir).toHaveBeenCalledWith(1);
-    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(mockRequest.usuario.email);
+    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(
+      mockRequest.usuario.email,
+    );
     expect(mockUrlService.buscarPorId).toHaveBeenCalledWith(1);
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NO_CONTENT);
   });
@@ -58,9 +56,13 @@ describe('ExcluirUrlControllerTest', () => {
       mockResponse,
     );
 
-    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith('test@example.com');
+    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(
+      'test@example.com',
+    );
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Usuário não encontrado' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      message: 'Usuário não encontrado',
+    });
     expect(mockUrlService.excluir).not.toHaveBeenCalled();
   });
 
@@ -76,7 +78,9 @@ describe('ExcluirUrlControllerTest', () => {
 
     expect(mockUrlService.buscarPorId).toHaveBeenCalledWith(1);
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Url não encontrada' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      message: 'Url não encontrada',
+    });
     expect(mockUrlService.excluir).not.toHaveBeenCalled();
   });
 
@@ -91,7 +95,9 @@ describe('ExcluirUrlControllerTest', () => {
     );
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Você não tem permissão para excluir esta Url' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      message: 'Você não tem permissão para excluir esta Url',
+    });
     expect(mockUrlService.excluir).not.toHaveBeenCalled();
   });
 });

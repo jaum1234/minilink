@@ -23,7 +23,7 @@ describe('AtualizarUrlControllerTest', () => {
     usuario: {
       email: 'test@example.com',
     },
-  }
+  };
 
   const mockAtualizarUrlDto = { origem: 'nova-origem' };
 
@@ -46,8 +46,13 @@ describe('AtualizarUrlControllerTest', () => {
       mockResponse,
     );
 
-    expect(mockUrlService.atualizar).toHaveBeenCalledWith(1, mockAtualizarUrlDto.origem);
-    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(mockRequest.usuario.email);
+    expect(mockUrlService.atualizar).toHaveBeenCalledWith(
+      1,
+      mockAtualizarUrlDto.origem,
+    );
+    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(
+      mockRequest.usuario.email,
+    );
     expect(mockUrlService.buscarPorId).toHaveBeenCalledWith(1);
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.OK);
   });
@@ -59,12 +64,16 @@ describe('AtualizarUrlControllerTest', () => {
       '1',
       mockAtualizarUrlDto,
       mockRequest,
-      mockResponse
+      mockResponse,
     );
 
-    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith('test@example.com');
+    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(
+      'test@example.com',
+    );
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Usuário não encontrado' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      message: 'Usuário não encontrado',
+    });
     expect(mockUrlService.atualizar).not.toHaveBeenCalled();
   });
 
@@ -76,12 +85,14 @@ describe('AtualizarUrlControllerTest', () => {
       '1',
       mockAtualizarUrlDto,
       mockRequest,
-      mockResponse
+      mockResponse,
     );
 
     expect(mockUrlService.buscarPorId).toHaveBeenCalledWith(1);
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Url não encontrada' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      message: 'Url não encontrada',
+    });
     expect(mockUrlService.atualizar).not.toHaveBeenCalled();
   });
 
@@ -93,11 +104,13 @@ describe('AtualizarUrlControllerTest', () => {
       '1',
       mockAtualizarUrlDto,
       mockRequest,
-      mockResponse
+      mockResponse,
     );
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Você não tem permissão para atualizar esta Url' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      message: 'Você não tem permissão para atualizar esta Url',
+    });
     expect(mockUrlService.atualizar).not.toHaveBeenCalled();
   });
 });

@@ -13,16 +13,19 @@ describe('CadastrarUsuarioControllerTest', () => {
   const mockResponse = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn(),
-  }
+  };
 
   const mockUsuarioService = {
     criar: jest.fn(),
     buscarPorEmail: jest.fn(),
   };
 
-  beforeEach(async () => { 
-    controller = new CadastrarUsuarioController(mockCadastrarUsuarioService as any, mockUsuarioService as any);
-  
+  beforeEach(async () => {
+    controller = new CadastrarUsuarioController(
+      mockCadastrarUsuarioService as any,
+      mockUsuarioService as any,
+    );
+
     mockResponse.status.mockClear();
     mockResponse.json.mockClear();
     mockUsuarioService.criar.mockClear();
@@ -40,15 +43,30 @@ describe('CadastrarUsuarioControllerTest', () => {
 
     await controller.cadastrar(dados, mockResponse as any);
 
-    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith("test@test.com");
-    expect(mockResponse.json).not.toHaveBeenCalledWith({ mensagem: 'Email já cadastrado' });
-    expect(mockResponse.json).not.toHaveBeenCalledWith({ mensagem: 'As senhas não coincidem' });
-    expect(mockResponse.status).not.toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
+    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(
+      'test@test.com',
+    );
+    expect(mockResponse.json).not.toHaveBeenCalledWith({
+      mensagem: 'Email já cadastrado',
+    });
+    expect(mockResponse.json).not.toHaveBeenCalledWith({
+      mensagem: 'As senhas não coincidem',
+    });
+    expect(mockResponse.status).not.toHaveBeenCalledWith(
+      HttpStatus.BAD_REQUEST,
+    );
     mockUsuarioService.buscarPorEmail.mockResolvedValue(null);
-    expect(mockCadastrarUsuarioService.hashSenha).toHaveBeenCalledWith("123456");
-    expect(mockUsuarioService.criar).toHaveBeenCalledWith('test@test.com', "hashed_password");
+    expect(mockCadastrarUsuarioService.hashSenha).toHaveBeenCalledWith(
+      '123456',
+    );
+    expect(mockUsuarioService.criar).toHaveBeenCalledWith(
+      'test@test.com',
+      'hashed_password',
+    );
     expect(mockResponse.status).toHaveBeenCalledWith(201);
-    expect(mockResponse.json).toHaveBeenCalledWith({ mensagem: 'Usuário cadastrado com sucesso.' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      mensagem: 'Usuário cadastrado com sucesso.',
+    });
   });
 
   // Deve falhar caso o email já tenha sido cadastrado
@@ -63,9 +81,13 @@ describe('CadastrarUsuarioControllerTest', () => {
 
     await controller.cadastrar(dados, mockResponse as any);
 
-    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith("test@test.com");
+    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(
+      'test@test.com',
+    );
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-    expect(mockResponse.json).toHaveBeenCalledWith({ mensagem: 'Email já cadastrado' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      mensagem: 'Email já cadastrado',
+    });
     expect(mockUsuarioService.criar).not.toHaveBeenCalled();
   });
 
@@ -81,9 +103,13 @@ describe('CadastrarUsuarioControllerTest', () => {
 
     await controller.cadastrar(dados, mockResponse as any);
 
-    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith("test@test.com");
+    expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(
+      'test@test.com',
+    );
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-    expect(mockResponse.json).toHaveBeenCalledWith({ mensagem: 'As senhas não coincidem' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      mensagem: 'As senhas não coincidem',
+    });
     expect(mockUsuarioService.criar).not.toHaveBeenCalled();
   });
 });

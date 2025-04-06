@@ -29,7 +29,7 @@ export class Url {
     length: 80,
     unique: true,
   })
-  @Index("IDX_ENCURTADA", { unique: true })
+  @Index('IDX_ENCURTADA', { unique: true })
   encurtada!: string;
 
   @CreateDateColumn()
@@ -44,6 +44,9 @@ export class Url {
   @OneToMany(() => LogAcesso, (logAcesso) => logAcesso.url)
   acessos!: LogAcesso[];
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.urls, { onDelete: 'CASCADE', nullable: true })
+  @ManyToOne(() => Usuario, (usuario) => usuario.urls, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
   usuario!: Usuario;
 }

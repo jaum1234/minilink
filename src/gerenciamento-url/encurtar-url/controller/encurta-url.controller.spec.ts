@@ -18,7 +18,7 @@ describe('EncutarUrlControllerTest', () => {
 
     mockUrlService = {
       criar: jest.fn(),
-    }
+    };
 
     mockConfigService = {
       get: jest.fn(),
@@ -26,26 +26,27 @@ describe('EncutarUrlControllerTest', () => {
 
     mockUsuarioService = {
       buscarPorEmail: jest.fn(),
-    } 
+    };
 
     controller = new EncutarUrlController(
       mockEncutarUrlService,
       mockUrlService,
       mockConfigService,
-      mockUsuarioService
+      mockUsuarioService,
     );
   });
 
   it('Deve encurtar uma URL corretamente', async () => {
-    const urlOrigem = 'https://www.example.com/pagina-muito-longa-com-varios-parametros';
+    const urlOrigem =
+      'https://www.example.com/pagina-muito-longa-com-varios-parametros';
     const codigoGerado = 'abc123';
     const baseUrl = 'http://localhost:3000';
 
     const mockRequest = {
       usuario: {
-        email: "test@mail"
-      }
-    }
+        email: 'test@mail',
+      },
+    };
 
     const dados: EncurtarUrlDto = { origem: urlOrigem };
 
@@ -55,7 +56,12 @@ describe('EncutarUrlControllerTest', () => {
     const resultado = await controller.encutar(dados, mockRequest);
 
     expect(mockEncutarUrlService.encutar).toHaveBeenCalledWith(urlOrigem);
-    expect(mockUrlService.criar).toHaveBeenCalledWith(urlOrigem, `${baseUrl}/${codigoGerado}`, [], undefined);
+    expect(mockUrlService.criar).toHaveBeenCalledWith(
+      urlOrigem,
+      `${baseUrl}/${codigoGerado}`,
+      [],
+      undefined,
+    );
     expect(mockConfigService.get).toHaveBeenCalledWith('BASE_URL');
     expect(resultado.encurtada).toEqual(`${baseUrl}/${codigoGerado}`);
   });

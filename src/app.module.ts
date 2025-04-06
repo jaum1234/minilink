@@ -18,7 +18,7 @@ import { UsuarioModule } from './identidade-usuario/usuario.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}.local`,
-      load: [databaseConfig]
+      load: [databaseConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -37,7 +37,7 @@ import { UsuarioModule } from './identidade-usuario/usuario.module';
     ExcluirUrlModule,
     AtualizarUrlModule,
     LogAcessoModule,
-    RedirecionarParaOrigemModule
+    RedirecionarParaOrigemModule,
   ],
 })
 export class AppModule {}

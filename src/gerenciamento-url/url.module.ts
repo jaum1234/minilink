@@ -1,7 +1,7 @@
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { Url } from "./url.entity";
-import { UrlService } from "./url.service";
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Url } from './url.entity';
+import { UrlService } from './url.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Url])],

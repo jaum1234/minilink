@@ -1,23 +1,28 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Usuario } from "../identidade-usuario/usuario.entity";
-import { LogAcesso } from "./log_acesso.entity";
-import { Url } from "./url.entity";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Usuario } from '../identidade-usuario/usuario.entity';
+import { LogAcesso } from './log_acesso.entity';
+import { Url } from './url.entity';
 
 @Injectable()
 export class UrlService {
   constructor(
     @InjectRepository(Url)
     private urlRepository: Repository<Url>,
-  ) { }
+  ) {}
 
-  async criar(origem: string, encurtada: string, acessos: LogAcesso[], usuario?: Usuario) {
+  async criar(
+    origem: string,
+    encurtada: string,
+    acessos: LogAcesso[],
+    usuario?: Usuario,
+  ) {
     const entity = this.urlRepository.create({
       origem,
       encurtada,
       acessos,
-      usuario
+      usuario,
     });
 
     return await this.urlRepository.save(entity);
@@ -27,12 +32,12 @@ export class UrlService {
     const urls = await this.urlRepository.find({
       where: {
         usuario: {
-          id: usuario.id
+          id: usuario.id,
         },
       },
       relations: {
         acessos: true,
-        usuario: true
+        usuario: true,
       },
       select: {
         id: true,
@@ -48,48 +53,50 @@ export class UrlService {
         },
       },
       order: {
-        createdAt: 'DESC'
-      }
+        createdAt: 'DESC',
+      },
     });
 
     return urls.map((url) => ({
       ...url,
-      totalAcessos: url.acessos.length
+      totalAcessos: url.acessos.length,
     }));
   }
 
-  async buscarPorId(id: number): Promise<Url|null> {
+  async buscarPorId(id: number): Promise<Url | null> {
     return await this.urlRepository.findOne({
       where: {
-        id
+        id,
       },
       relations: {
         usuario: true,
-      }
+      },
     });
   }
 
-  async buscarPorEncurtada(encurtada: string): Promise<Url|null> {
+  async buscarPorEncurtada(encurtada: string): Promise<Url | null> {
     return await this.urlRepository.findOne({
       where: {
-        encurtada
-      }
+        encurtada,
+      },
     });
   }
 
   async excluir(urlId: number) {
     await this.urlRepository.softDelete({
-      id: urlId
+      id: urlId,
     });
   }
 
   async atualizar(id: number, origem: string) {
-    return await this.urlRepository.update({
-      id,
-    },
-    {
-      origem
-    });
+    return await this.urlRepository.update(
+      {
+        id,
+      },
+      {
+        origem,
+      },
+    );
   }
 
   async adicionarAcesso(urlId: number, logAcesso: LogAcesso) {
@@ -103,9 +110,9 @@ export class UrlService {
     });
 
     if (url === null) return;
-   
+
     url.acessos.push(logAcesso);
-      
+
     await this.urlRepository.save(url);
   }
 }
