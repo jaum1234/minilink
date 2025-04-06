@@ -58,7 +58,7 @@ describe('RedirecionarParaOrigemControllerTest', () => {
     });
     expect(mockUrlService.adicionarAcesso).toHaveBeenCalledWith(1, log);
     expect(mockResponse.redirect).toHaveBeenCalledWith(
-      301,
+      HttpStatus.TEMPORARY_REDIRECT,
       'http://origem.com',
     );
   });

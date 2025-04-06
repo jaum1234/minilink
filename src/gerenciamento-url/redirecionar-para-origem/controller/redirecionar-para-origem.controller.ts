@@ -37,6 +37,6 @@ export class RedirecionarParaOrigemController {
     if (url.origem.match(/^https?/) === null)
       url.origem = `https://${url.origem}`;
 
-    return res.redirect(301, url.origem);
+    return res.redirect(HttpStatus.TEMPORARY_REDIRECT, url.origem);
   }
 }
