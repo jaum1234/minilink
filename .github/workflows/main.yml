@@ -48,8 +48,8 @@ jobs:
 
       - name: Construir Imagem
         run: |
-          docker buildx build -t ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ github.sha }} .
+          docker buildx --load build -t ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ env.DOCKER_TAG }} .
       
       - name: Publicar Imagem
         run: |
-          docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/minilink:${{ env.DOCKER_TAG }}
