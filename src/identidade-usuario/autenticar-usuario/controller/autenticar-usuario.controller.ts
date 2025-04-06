@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { UsuarioService } from '../../usuario.service';
 import { AutenticarUsuarioDto } from '../autenticar-usuario.dto';
@@ -21,7 +21,10 @@ export class AutenticarUsuarioController {
     const usuario = await this.usuarioService.buscarPorEmail(email);
 
     if (usuario === null) {
-      return res.status(404).json({ mensagem: 'Usuário não encontrado' });
+      return res.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Usuário não encontrado',
+      });
     }
 
     if (
@@ -30,11 +33,20 @@ export class AutenticarUsuarioController {
         usuario.senha,
       ))
     ) {
-      return res.status(400).json({ mensagem: 'Senha incorreta.' });
+      return res.status(400).json({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Senha incorreta.',
+      });
     }
 
     const jwt = await this.autenticarUsuarioService.gerarJwt(email);
 
-    return res.status(200).json({ accessToken: jwt });
+    return res.status(200).json({
+      statusCode: HttpStatus.OK,
+      data: {
+        accessToken: jwt,
+      },
+      message: 'Usuário autenticado com sucesso',
+    });
   }
 }

@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ExtrairJwtGuard } from '../../..//identidade-usuario/autenticar-usuario/guards/extrair-jwt.guard';
 import { UsuarioService } from '../../..//identidade-usuario/usuario.service';
@@ -18,10 +25,7 @@ export class EncutarUrlController {
 
   @UseGuards(ExtrairJwtGuard)
   @Post()
-  async encutar(
-    @Body() encurtarUrlDto: EncurtarUrlDto,
-    @Request() req,
-  ): Promise<{ encurtada: string }> {
+  async encutar(@Body() encurtarUrlDto: EncurtarUrlDto, @Request() req) {
     const codigo = this.encutarUrlService.encutar(encurtarUrlDto.origem);
 
     const base = this.configService.get('BASE_URL');
@@ -37,6 +41,12 @@ export class EncutarUrlController {
 
     this.urlService.criar(encurtarUrlDto.origem, encurtada, [], usuario);
 
-    return { encurtada };
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Url encurtada com sucesso',
+      data: {
+        encurtada,
+      },
+    };
   }
 }

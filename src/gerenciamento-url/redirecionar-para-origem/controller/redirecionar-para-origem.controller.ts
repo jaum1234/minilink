@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { LogAcessoService } from '../../log_acesso.service';
@@ -24,8 +24,9 @@ export class RedirecionarParaOrigemController {
     );
 
     if (url === null) {
-      return res.status(404).json({
-        mensagem: 'Url não encontrada.',
+      return res.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Url não encontrada.',
       });
     }
 

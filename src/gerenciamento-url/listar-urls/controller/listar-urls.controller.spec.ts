@@ -44,7 +44,11 @@ describe('ListarUrlsController', () => {
       email: 'teste@email.com',
     });
     expect(mockResposne.status).toHaveBeenCalledWith(HttpStatus.OK);
-    expect(mockResposne.json).toHaveBeenCalledWith([new Url()]);
+    expect(mockResposne.json).toHaveBeenCalledWith({
+      message: 'Urls do usuário autenticado listadas',
+      statusCode: HttpStatus.OK,
+      data: [new Url()],
+    });
   });
 
   it('Deve retornar 404 caso o usuário não seja encontrado.', async () => {
@@ -57,9 +61,10 @@ describe('ListarUrlsController', () => {
     );
     expect(mockResposne.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
     expect(mockResposne.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.NOT_FOUND,
       message: 'Usuário não encontrado',
     });
     expect(mockUrlService.buscarTodos).not.toHaveBeenCalled();
-    expect(mockResposne.status).not.toBeCalledWith(HttpStatus.OK);
+    expect(mockResposne.status).not.toHaveBeenCalledWith(HttpStatus.OK);
   });
 });

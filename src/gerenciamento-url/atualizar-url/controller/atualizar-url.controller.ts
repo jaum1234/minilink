@@ -30,36 +30,39 @@ export class AtualizarUrlController {
     @Request() req: { usuario: { email: string } },
     @Res() res: Response,
   ) {
-
     const usuario = await this.usuarioService.buscarPorEmail(req.usuario.email);
 
     if (usuario === null) {
-      return res
-        .status(HttpStatus.NOT_FOUND)
-        .json({ message: 'Usuário não encontrado' });
+      return res.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Usuário não encontrado',
+      });
     }
 
     const url = await this.urlService.buscarPorId(params.urlId);
 
     if (url === null) {
-      return res
-        .status(HttpStatus.NOT_FOUND)
-        .json({ message: 'Url não encontrada' });
+      return res.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Url não encontrada',
+      });
     }
 
     if (url.usuario.id !== usuario.id) {
-      return res
-        .status(HttpStatus.FORBIDDEN)
-        .json({ message: 'Você não tem permissão para atualizar esta Url' });
+      return res.status(HttpStatus.FORBIDDEN).json({
+        statusCode: HttpStatus.FORBIDDEN,
+        message: 'Você não tem permissão para atualizar esta Url',
+      });
     }
 
-    await this.urlService.atualizar(
-      params.urlId,
-      atualizarUrlDto.origem,
-    );
+    await this.urlService.atualizar(params.urlId, atualizarUrlDto.origem);
 
-    return res
-      .status(HttpStatus.OK)
-      .json({ message: 'Url atualizada com sucesso' });
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: {
+        origem: atualizarUrlDto.origem,
+      },
+      message: 'Url atualizada com sucesso',
+    });
   }
 }

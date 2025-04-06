@@ -27,23 +27,30 @@ export class CadastrarUsuarioController {
     const { email, senha, confirmacaoSenha } = cadastrarUsuarioDto;
 
     if ((await this.usuarioService.buscarPorEmail(email)) !== null) {
-      return res
-        .status(HttpStatus.BAD_REQUEST)
-        .json({ mensagem: 'Email já cadastrado' });
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Email já cadastrado',
+      });
     }
 
     if (senha !== confirmacaoSenha) {
-      return res
-        .status(HttpStatus.BAD_REQUEST)
-        .json({ mensagem: 'As senhas não coincidem' });
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'As senhas não coincidem',
+      });
     }
 
     const hash = await this.cadastrarUsuarioService.hashSenha(senha);
 
-    await this.usuarioService.criar(email, hash);
+    const usuario = await this.usuarioService.criar(email, hash);
 
-    return res
-      .status(201)
-      .json({ mensagem: 'Usuário cadastrado com sucesso.' });
+    return res.status(201).json({
+      statusCode: HttpStatus.CREATED,
+      data: {
+        id: usuario.id,
+        email: usuario.email,
+      },
+      message: 'Usuário cadastrado com sucesso.',
+    });
   }
 }

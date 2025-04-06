@@ -40,6 +40,10 @@ describe('CadastrarUsuarioControllerTest', () => {
 
     mockUsuarioService.buscarPorEmail.mockResolvedValue(null);
     mockCadastrarUsuarioService.hashSenha.mockResolvedValue('hashed_password');
+    mockUsuarioService.criar.mockResolvedValue({
+      id: 1,
+      email: 'test@test.com',
+    });
 
     await controller.cadastrar(dados, mockResponse as any);
 
@@ -47,10 +51,10 @@ describe('CadastrarUsuarioControllerTest', () => {
       'test@test.com',
     );
     expect(mockResponse.json).not.toHaveBeenCalledWith({
-      mensagem: 'Email já cadastrado',
+      message: 'Email já cadastrado',
     });
     expect(mockResponse.json).not.toHaveBeenCalledWith({
-      mensagem: 'As senhas não coincidem',
+      message: 'As senhas não coincidem',
     });
     expect(mockResponse.status).not.toHaveBeenCalledWith(
       HttpStatus.BAD_REQUEST,
@@ -65,11 +69,15 @@ describe('CadastrarUsuarioControllerTest', () => {
     );
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      mensagem: 'Usuário cadastrado com sucesso.',
+      statusCode: HttpStatus.CREATED,
+      data: {
+        id: 1,
+        email: 'test@test.com',
+      },
+      message: 'Usuário cadastrado com sucesso.',
     });
   });
 
-  // Deve falhar caso o email já tenha sido cadastrado
   it('Deve falhar caso o email já tenha sido cadastrado', async () => {
     const dados: CadastrarUsuarioDto = {
       email: 'test@test.com',
@@ -86,12 +94,12 @@ describe('CadastrarUsuarioControllerTest', () => {
     );
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      mensagem: 'Email já cadastrado',
+      statusCode: HttpStatus.BAD_REQUEST,
+      message: 'Email já cadastrado',
     });
     expect(mockUsuarioService.criar).not.toHaveBeenCalled();
   });
 
-  // Deve falhar caso as senhas não coincidam
   it('Deve falhar caso as senhas não coincidam', async () => {
     const dados: CadastrarUsuarioDto = {
       email: 'test@test.com',
@@ -108,7 +116,8 @@ describe('CadastrarUsuarioControllerTest', () => {
     );
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      mensagem: 'As senhas não coincidem',
+      statusCode: HttpStatus.BAD_REQUEST,
+      message: 'As senhas não coincidem',
     });
     expect(mockUsuarioService.criar).not.toHaveBeenCalled();
   });

@@ -1,8 +1,10 @@
-import { IsEmail, IsNotEmpty } from "class-validator";
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class AutenticarUsuarioDto {
-
-  @IsEmail({}, { message: 'O campo email deve ser um endereço de email válido.' })
+  @IsEmail(
+    {},
+    { message: 'O campo email deve ser um endereço de email válido.' },
+  )
   @IsNotEmpty({ message: 'O campo email é obrigatório.' })
   email!: string;
 

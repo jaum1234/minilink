@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { LogAcesso } from '../../log_acesso.entity';
 import { RedirecionarParaOrigemController } from './redirecionar-para-origem.controller';
 
@@ -77,7 +78,8 @@ describe('RedirecionarParaOrigemControllerTest', () => {
     expect(mockUrlService.adicionarAcesso).not.toHaveBeenCalled();
     expect(mockResponse.status).toHaveBeenCalledWith(404);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      mensagem: 'Url não encontrada.',
+      statusCode: HttpStatus.NOT_FOUND,
+      message: 'Url não encontrada.',
     });
   });
 });

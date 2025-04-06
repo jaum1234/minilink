@@ -28,7 +28,7 @@ describe('ExcluirUrlControllerTest', () => {
 
   const mockUrlIdParam: UrlIdParam = {
     urlId: 1,
-  }
+  };
 
   beforeEach(async () => {
     controller = new ExcluirUrlController(mockUrlService, mockUsuarioService);
@@ -66,6 +66,7 @@ describe('ExcluirUrlControllerTest', () => {
     );
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
     expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.NOT_FOUND,
       message: 'Usuário não encontrado',
     });
     expect(mockUrlService.excluir).not.toHaveBeenCalled();
@@ -84,6 +85,7 @@ describe('ExcluirUrlControllerTest', () => {
     expect(mockUrlService.buscarPorId).toHaveBeenCalledWith(1);
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
     expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.NOT_FOUND,
       message: 'Url não encontrada',
     });
     expect(mockUrlService.excluir).not.toHaveBeenCalled();
@@ -101,6 +103,7 @@ describe('ExcluirUrlControllerTest', () => {
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
     expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.FORBIDDEN,
       message: 'Você não tem permissão para excluir esta Url',
     });
     expect(mockUrlService.excluir).not.toHaveBeenCalled();

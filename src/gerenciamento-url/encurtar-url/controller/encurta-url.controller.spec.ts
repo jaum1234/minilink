@@ -1,5 +1,6 @@
 // Escreva um teste que verifique se o controller encurta uma url corretamente
 
+import { HttpStatus } from '@nestjs/common';
 import { EncurtarUrlDto } from '../encurtar-url.dto';
 import { EncutarUrlController } from './encurtar-url.controller';
 
@@ -63,6 +64,8 @@ describe('EncutarUrlControllerTest', () => {
       undefined,
     );
     expect(mockConfigService.get).toHaveBeenCalledWith('BASE_URL');
-    expect(resultado.encurtada).toEqual(`${baseUrl}/${codigoGerado}`);
+    expect(resultado.data.encurtada).toEqual(`${baseUrl}/${codigoGerado}`);
+    expect(resultado.statusCode).toEqual(HttpStatus.CREATED);
+    expect(resultado.message).toEqual('Url encurtada com sucesso');
   });
 });

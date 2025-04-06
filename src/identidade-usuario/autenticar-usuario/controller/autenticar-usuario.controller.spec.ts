@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { AutenticarUsuarioDto } from '../autenticar-usuario.dto';
 import { AutenticarUsuarioController } from './autenticar-usuario.controller';
 
@@ -45,12 +46,18 @@ describe('AutenticarUsuarioControllerTest', () => {
 
     await controller.autenticar(dados, mockResponse);
 
-    expect(mockResponse.json).toHaveBeenCalledWith({ accessToken: 'token' });
-    expect(mockResponse.json).not.toHaveBeenCalledWith({
-      mensagem: 'Senha incorreta.',
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.OK,
+      data: {
+        accessToken: 'token',
+      },
+      message: 'Usuário autenticado com sucesso',
     });
     expect(mockResponse.json).not.toHaveBeenCalledWith({
-      mensagem: 'Usuário não encontrado',
+      message: 'Senha incorreta.',
+    });
+    expect(mockResponse.json).not.toHaveBeenCalledWith({
+      message: 'Usuário não encontrado',
     });
     expect(mockUsuarioService.buscarPorEmail).toHaveBeenCalledWith(dados.email);
     expect(mockAutenticarUsuarioService.compararSenhas).toHaveBeenCalledWith(
@@ -82,7 +89,8 @@ describe('AutenticarUsuarioControllerTest', () => {
     );
     expect(mockResponse.status).toHaveBeenCalledWith(404);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      mensagem: 'Usuário não encontrado',
+      statusCode: HttpStatus.NOT_FOUND,
+      message: 'Usuário não encontrado',
     });
   });
 
@@ -111,7 +119,8 @@ describe('AutenticarUsuarioControllerTest', () => {
     );
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      mensagem: 'Senha incorreta.',
+      statusCode: HttpStatus.BAD_REQUEST,
+      message: 'Senha incorreta.',
     });
   });
 });

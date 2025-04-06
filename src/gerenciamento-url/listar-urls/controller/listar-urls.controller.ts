@@ -27,13 +27,18 @@ export class ListarUrlsController {
     const usuario = await this.usuarioService.buscarPorEmail(req.usuario.email);
 
     if (usuario === null) {
-      return res
-        .status(HttpStatus.NOT_FOUND)
-        .json({ message: 'Usuário não encontrado' });
+      return res.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Usuário não encontrado',
+      });
     }
 
     const urls = await this.urlService.buscarTodos(usuario);
 
-    return res.status(HttpStatus.OK).json(urls);
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      message: 'Urls do usuário autenticado listadas',
+      data: urls,
+    });
   }
 }

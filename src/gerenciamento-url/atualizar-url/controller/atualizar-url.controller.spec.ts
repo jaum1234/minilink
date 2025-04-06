@@ -22,7 +22,7 @@ describe('AtualizarUrlControllerTest', () => {
 
   const mockUrlIdParam: UrlIdParam = {
     urlId: 1,
-  }
+  };
 
   const mockRequest = {
     usuario: {
@@ -60,6 +60,11 @@ describe('AtualizarUrlControllerTest', () => {
     );
     expect(mockUrlService.buscarPorId).toHaveBeenCalledWith(1);
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.OK);
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.OK,
+      data: { origem: mockAtualizarUrlDto.origem },
+      message: 'Url atualizada com sucesso',
+    });
   });
 
   it('Deve retornar 404 caso o usuário não seja encontrato.', async () => {
@@ -77,6 +82,7 @@ describe('AtualizarUrlControllerTest', () => {
     );
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
     expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.NOT_FOUND,
       message: 'Usuário não encontrado',
     });
     expect(mockUrlService.atualizar).not.toHaveBeenCalled();
@@ -96,6 +102,7 @@ describe('AtualizarUrlControllerTest', () => {
     expect(mockUrlService.buscarPorId).toHaveBeenCalledWith(1);
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
     expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.NOT_FOUND,
       message: 'Url não encontrada',
     });
     expect(mockUrlService.atualizar).not.toHaveBeenCalled();
@@ -114,6 +121,7 @@ describe('AtualizarUrlControllerTest', () => {
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
     expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.FORBIDDEN,
       message: 'Você não tem permissão para atualizar esta Url',
     });
     expect(mockUrlService.atualizar).not.toHaveBeenCalled();
