@@ -94,4 +94,4 @@ jobs:
             "cd ${{ secrets.APP_DIRECTORY }} && \
              docker compose pull && \
              docker compose down && \
-             docker compose -f ${{ env.COMPOSE_FILE }} up -d"
+             docker compose -f ${{ vars.COMPOSE_FILE }} up -d"
